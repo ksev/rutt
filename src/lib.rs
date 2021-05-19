@@ -96,13 +96,22 @@ where
 }
 
 pub trait GraphSearch<'a> {
+    /// The type of the Graph vertex
     type Vertex: Copy + std::hash::Hash + Eq;
+    /// The type of the cost value 
+    /// Kepp in mind that the algorithm will use addition internally so something overly constrained like a u8 might be too small
     type Cost: Ord + Copy + Zero + Add<Output = Self::Cost>;
 
+    /// Optionally override how many iterations the search will do trough the graph
+    /// Defaults to [usize::MAX]
     const MAXITERATIONS: usize = usize::MAX;
 
+    /// A heuristic of total cost between two points
+    /// Common ones are Euclidian distance and Manhattan distance
     fn heuristic<'b: 'a>(&'b self, start: Self::Vertex, goal: Self::Vertex) -> Self::Cost;
 
+    /// The implementor has to provide adjecent vertexes to the search
+    /// For a 2D grid this would be the 8 or 4 adjecent squares around the origin depending on if you'd allow diaglonal movement or not.
     fn neighbours<'b: 'a>(
         &'b self,
         origin: Self::Vertex,
@@ -121,6 +130,9 @@ pub trait GraphSearch<'a> {
         path
     }
 
+    /// Find the shortest path between start and the goal
+    /// 
+    /// This variant allows you to reuse memory between searches
     fn find_path_with_context<'b: 'a>(
         &'b self,
         context: &mut SearchContext<Self::Vertex, Self::Cost>,

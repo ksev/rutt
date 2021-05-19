@@ -10,7 +10,7 @@ keywords = ["gamedev", "robotics", "A*", "D*", "D* Lite", "D* Extra Lite", "path
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [workspace]
-members = ["demos/find"]
+members = ["demo/find"]
 
 [dependencies]
 fxhash = "0.2.1"
