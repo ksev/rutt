@@ -1,6 +1,6 @@
 mod zero;
 
-use std::{cmp::Ordering, collections::binary_heap::BinaryHeap, ops::Add};
+use std::{cmp::Ordering, collections::binary_heap::BinaryHeap, hash::Hash, ops::Add};
 
 use fxhash::FxHashMap;
 use fxhash::FxHashSet;
@@ -97,8 +97,8 @@ where
 
 pub trait GraphSearch<'a> {
     /// The type of the Graph vertex
-    type Vertex: Copy + std::hash::Hash + Eq;
-    /// The type of the cost value 
+    type Vertex: Copy + Hash + Eq;
+    /// The type of the cost value
     /// Kepp in mind that the algorithm will use addition internally so something overly constrained like a u8 might be too small
     type Cost: Ord + Copy + Zero + Add<Output = Self::Cost>;
 
@@ -131,7 +131,7 @@ pub trait GraphSearch<'a> {
     }
 
     /// Find the shortest path between start and the goal
-    /// 
+    ///
     /// This variant allows you to reuse memory between searches
     fn find_path_with_context<'b: 'a>(
         &'b self,
